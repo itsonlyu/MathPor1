@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คณิตศาสตร์ ป.1 - ร้านขายของเล่นมหัศจรรย์</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Cute Thai Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Thasadith:wght@400;700&family=Mitr:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <!-- Canvas Confetti for celebrations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Mitr', sans-serif;
+            background-color: #f0fdf4;
+            /* Light pastel green background */
+        }
+
+        .toy-font {
+            font-family: 'Fredoka One', 'Mitr', sans-serif;
+        }
+
+        .shelf-gradient {
+            background: linear-gradient(180deg, #d97706 0%, #b45309 100%);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center justify-between p-4 bg-amber-50/50">
+
+    <!-- Header Banner -->
+    <header class="w-full max-w-4xl text-center my-4 bg-white rounded-3xl p-6 shadow-md border-4 border-amber-300">
+        <h1 class="text-3xl md:text-4xl font-bold text-amber-600 toy-font flex justify-center items-center gap-2">
+            🧸 ร้านของเล่นมหัศจรรย์ของฉัน 🏎️
+        </h1>
+        <p class="text-gray-600 mt-2 text-lg">มาช่วยจัดของเล่นขึ้นชั้นวางโดยการแก้โจทย์ปัญหาคณิตศาสตร์กันนะเด็กๆ!
+            (สะสมให้ครบ 10 ชิ้น)</p>
+
+        <!-- Overall Progress -->
+        <div class="mt-4">
+            <div class="flex justify-between text-sm font-semibold text-amber-700 mb-1">
+                <span>ความสำเร็จของร้านค้า:</span>
+                <span id="progress-text">จัดร้านสำเร็จ 0/10 ชิ้น</span>
+            </div>
+            <div class="w-full bg-amber-100 rounded-full h-4 overflow-hidden border border-amber-300">
+                <div id="progress-bar" class="bg-emerald-400 h-4 rounded-full transition-all duration-500 ease-out"
+                    style="width: 0%"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Canvas Area -->
+    <main class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-6 my-2 items-stretch">
+
+        <!-- Left Side: Interactive Toy Shelf (Canvas representation) -->
+        <section
+            class="md:col-span-5 bg-white rounded-3xl p-6 shadow-md border-4 border-amber-400 flex flex-col justify-between">
+            <h2 class="text-xl font-bold text-amber-700 text-center mb-4">🧸 ชั้นวางของเล่นในร้าน</h2>
+
+            <div
+                class="grid grid-cols-3 gap-4 bg-amber-100/60 p-4 rounded-2xl border-2 border-amber-200 relative min-h-[300px]">
+                <!-- Shelves visual effect -->
+                <div class="absolute left-0 right-0 top-[28%] h-3 shelf-gradient rounded-full shadow-sm"></div>
+                <div class="absolute left-0 right-0 top-[60%] h-3 shelf-gradient rounded-full shadow-sm"></div>
+                <div class="absolute left-0 right-0 top-[90%] h-3 shelf-gradient rounded-full shadow-sm"></div>
+
+                <!-- Toy Slots -->
+                <!-- Row 1 -->
+                <div id="toy-slot-0"
+                    class="flex flex-col items-center justify-end h-20 z-10 transition-all duration-300 grayscale opacity-30 scale-75">
+                    <span class="text-4xl">🧸</span>
+                    <span class="text-xs font-semibold text-amber-800 bg-amber-200/80 px-1 rounded">ตุ๊กตาหมี</span>
+                </div>
+                <div id="toy-slot-1"
+                    class="flex flex-col items-center justify-end h-20 z-10 transition-all duration-300 grayscale opacity-30 scale-75">
+                    <span class="text-4xl">🏎️</span>
+                    <span class="text-xs font-semibold text-amber-800 bg-amber-200/80 px-1 rounded">รถบังคับ</span>
+                </div>
+                <div id="toy-slot-2"
+                    class="flex flex-col items-center justify-end h-20 z-10 transition-all duration-300 grayscale opacity-30 scale-75">
+                    <span class="text-4xl">⚽</span>
+                    <span class="text-xs font-semibold text-amber-800 bg-amber-200/80 px-1 rounded">ลูกบอล</span>
+                </div>
+
+                <!-- Row 2 -->
+                <div id="toy-slot-3"
+                    class="flex flex-col items-center justify-end h-20 z-10 transition-all duration-300 grayscale opacity-30 scale-75 mt-4">
+                    <span class="text-4xl">🧱</span>
+                    <span class="text-xs font-semibold text-amber-800 bg-amber-200/80 px-1 rounded">เลโก้</span>
+                </div>
+                <div id="toy-slot-4"
+                    class="flex flex-col items-center justify-end h-20 z-10 transition-all duration-300 grayscale opacity-30 scale-75 mt-4">
+                    <span class="text-4xl">🗡️</span>
+                    <span class="text-xs font-semibold text-amber-800 bg-amber-200/80 px-1 rounded">ดาบของเล่น</span>
+                </div>
+                <div id="toy-slot-5"
+                    class="flex flex-col items-center justify-end h-20 z-10 transition-all duration-300 grayscale opacity-30 scale-75 mt-4">
+                    <span class="text-4xl">🤖</span>
+                    <span class="text-xs font-semibold text-amber-800 bg-amber-200/80 px-1 rounded">หุ่นยนต์</span>
+                </div>
+
+                <!-- Row 3 -->
+                <div id="toy-slot-6"
+                    class="flex flex-col items-center justify-end h-20 z-10 transition-all duration-300 grayscale opacity-30 scale-75 mt-4">
+                    <span class="text-4xl">🎈</span>
+                    <span class="text-xs font-semibold text-amber-800 bg-amber-200/80 px-1 rounded">ลูกโป่ง</span>
+                </div>
+                <div id="toy-slot-7"
+                    class="flex flex-col items-center justify-end h-20 z-10 transition-all duration-300 grayscale opacity-30 scale-75 mt-4">
+                    <span class="text-4xl">🎠</span>
+                    <span class="text-xs font-semibold text-amber-800 bg-amber-200/80 px-1 rounded">ม้าหมุน</span>
+                </div>
+                <div id="toy-slot-8"
+                    class="flex flex-col items-center justify-end h-20 z-10 transition-all duration-300 grayscale opacity-30 scale-75 mt-4">
+                    <span class="text-4xl">🪁</span>
+                    <span class="text-xs font-semibold text-amber-800 bg-amber-200/80 px-1 rounded">ว่าวแสนรัก</span>
+                </div>
+
+                <!-- Last Slot (Centered at bottom) -->
+                <div class="col-span-3 flex justify-center mt-4">
+                    <div id="toy-slot-9"
+                        class="flex flex-col items-center justify-end h-20 z-10 transition-all duration-300 grayscale opacity-30 scale-75">
+                        <span class="text-4xl font-bold">🥚</span>
+                        <span class="text-xs font-semibold text-amber-800 bg-amber-200/80 px-1 rounded">ไข่สุ่ม</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center text-xs text-amber-700 font-semibold bg-amber-50 p-2 rounded-xl">
+                💡 เมื่อตอบคำถามถูกต้อง ของเล่นจะเรืองแสงและมาวางอยู่บนชั้นทันที!
+            </div>
+        </section>
+
+        <!-- Right Side: Math Word Problem & Activity Board -->
+        <section
+            class="md:col-span-7 bg-white rounded-3xl p-6 shadow-md border-4 border-amber-400 flex flex-col justify-between min-h-[400px]">
+
+            <!-- Game/Active Content -->
+            <div id="game-container">
+                <!-- Question Title & Toy Icon -->
+                <div class="flex items-center gap-4 border-b-2 border-dashed border-amber-200 pb-4 mb-4">
+                    <div id="question-toy-icon" class="text-5xl bg-amber-100 p-3 rounded-2xl">🧸</div>
+                    <div>
+                        <span id="question-number"
+                            class="text-sm font-bold text-amber-500 uppercase tracking-wider">โจทย์ข้อที่ 1 / 10</span>
+                        <h3 id="question-toy-name" class="text-xl font-bold text-amber-800">ภารกิจตามหาตุ๊กตาหมี</h3>
+                    </div>
+                </div>
+
+                <!-- Question Text -->
+                <div class="my-6 bg-amber-50/50 p-5 rounded-2xl border border-amber-100">
+                    <p id="question-text" class="text-xl text-gray-800 font-semibold leading-relaxed">
+                        ในร้านมีตุ๊กตาหมีอยู่ 8 ตัว คุณแม่เอามาเพิ่มให้อีก 5 ตัว ตอนนี้ในร้านมีตุ๊กตาหมีทั้งหมดกี่ตัว?
+                    </p>
+                    <!-- Small Math Equation Hint -->
+                    <p id="equation-hint" class="text-sm text-gray-400 mt-2 font-mono">สมการปริศนา: 8 + 5 = ?</p>
+                </div>
+
+                <!-- Multiple Choices -->
+                <div class="grid grid-cols-2 gap-4" id="choices-container">
+                    <!-- Dynamic Buttons will be inserted here -->
+                </div>
+
+                <!-- Instant Feedback Area -->
+                <div id="feedback-area" class="mt-4 text-center hidden">
+                    <div id="feedback-message" class="text-lg font-bold p-3 rounded-xl transition-all">
+                        เก่งมากถูกต้องแล้วจ้า! 🎉
+                    </div>
+                </div>
+            </div>
+
+            <!-- Complete/Certificate Screen (Initially Hidden) -->
+            <div id="completion-screen" class="hidden text-center py-6">
+                <span class="text-6xl animate-bounce inline-block">🏆</span>
+                <h3 class="text-2xl font-bold text-amber-600 mt-4 toy-font">สุดยอดผู้จัดการร้านของเล่นตัวน้อย!</h3>
+                <p class="text-gray-600 mt-2">หนูเก่งมากๆ เลย สามารถจัดร้านของเล่นได้จนสวยงามสมบูรณ์ครบถ้วน!</p>
+
+                <div
+                    class="my-6 bg-gradient-to-r from-yellow-100 to-amber-100 p-6 rounded-2xl border-4 border-dashed border-amber-400 inline-block w-full">
+                    <p class="text-amber-800 font-bold text-xl mb-2">🏅 เกียรติบัตรนักคณิตศาสตร์ตัวน้อย 🏅</p>
+                    <p class="text-gray-700 text-sm">ขอมอบให้แก่ผู้เล่นที่ไขปริศนาคณิตศาสตร์ร้านของเล่นครบ 10 ข้อ</p>
+                    <div class="mt-4 text-emerald-600 font-bold text-2xl font-mono">คะแนนดิบเต็ม: 10 / 10 คะแนน!</div>
+                </div>
+
+                <button onclick="resetGame()"
+                    class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-lg px-8 py-3 rounded-full shadow-lg transition transform hover:scale-105">
+                    เล่นอีกครั้ง 🔄
+                </button>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div id="navigation-area"
+                class="flex justify-between items-center border-t-2 border-dashed border-amber-200 pt-4 mt-6">
+                <button id="prev-btn" onclick="prevQuestion()"
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    ⬅️ ย้อนกลับ
+                </button>
+                <button id="next-btn" onclick="nextQuestion()"
+                    class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-xl transition shadow-md hidden">
+                    ข้อต่อไป ➡️
+                </button>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center text-sm text-gray-500 my-4">
+        © 2026 Interactive Toy Shop Math Canvas | ออกแบบสำหรับการเรียนรู้ของเด็ก ป.1
+    </footer>
+
+    <script>
+        // Math Problems Database (10 items, themed around toys)
+        const problems = [
+            {
+                id: 1,
+                name: "ตุ๊กตาหมีแสนอบอุ่น",
+                icon: "🧸",
+                text: "ในร้านมีตุ๊กตาหมีอยู่ 8 ตัว คุณแม่เอามาเพิ่มให้อีก 5 ตัว ตอนนี้ในร้านมีตุ๊กตาหมีทั้งหมดกี่ตัว?",
+                equation: "8 + 5 = ?",
+                choices: [11, 12, 13, 14],
+                answer: 13
+            },
+            {
+                id: 2,
+                name: "รถบังคับจอมซิ่ง",
+                icon: "🏎️",
+                text: "บนชั้นวางมีรถบังคับอยู่ 12 คัน มีเด็กมาซื้อไป 4 คัน จะเหลือรถบังคับอยู่บนชั้นกี่คัน?",
+                equation: "12 - 4 = ?",
+                choices: [6, 7, 8, 9],
+                answer: 8
+            },
+            {
+                id: 3,
+                name: "ลูกบอลหลากสี",
+                icon: "⚽",
+                text: "น้องแก้วซื้อลูกบอลสีแดง 6 ลูก และซื้อลูกบอลสีเขียวอีก 6 ลูก น้องแก้วซื้อลูกบอลรวมกันทั้งหมดกี่ลูก?",
+                equation: "6 + 6 = ?",
+                choices: [10, 11, 12, 13],
+                answer: 12
+            },
+            {
+                id: 4,
+                name: "บล็อกไม้ตัวต่อสร้างสรรค์",
+                icon: "🧱",
+                text: "มีตัวต่อเลโก้อยู่ 15 กล่อง ขายไปได้ 7 กล่อง ร้านขายของเล่นจะเหลือเลโก้อยู่กี่กล่อง?",
+                equation: "15 - 7 = ?",
+                choices: [7, 8, 9, 10],
+                answer: 8
+            },
+            {
+                id: 5,
+                name: "ดาบของเล่นผู้พิทักษ์",
+                icon: "🗡️",
+                text: "ตะวันต้องการซื้อดาบของเล่นราคา 14 บาท แต่ตะวันมีเงินอยู่แค่ 9 บาท ตะวันยังขาดเงินอีกกี่บาทถึงจะซื้อดาบของเล่นชิ้นนี้ได้?",
+                equation: "14 - 9 = ?",
+                choices: [4, 5, 6, 7],
+                answer: 5
+            },
+            {
+                id: 6,
+                name: "หุ่นยนต์พิทักษ์โลก",
+                icon: "🤖",
+                text: "ในตู้กระจกมีหุ่นยนต์สีฟ้า 7 ตัว และหุ่นยนต์สีแดง 9 ตัว ในตู้กระจกมีหุ่นยนต์ทั้งหมดกี่ตัว?",
+                equation: "7 + 9 = ?",
+                choices: [14, 15, 16, 17],
+                answer: 16
+            },
+            {
+                id: 7,
+                name: "ลูกโป่งสวรรค์สายรุ้ง",
+                icon: "🎈",
+                text: "มีลูกโป่งสวรรค์ผูกอยู่หน้าร้าน 18 ลูก ลมพัดลูกโป่งแตกไป 5 ลูก จะเหลือลูกโป่งที่ยังไม่แตกกี่ลูก?",
+                equation: "18 - 5 = ?",
+                choices: [11, 12, 13, 14],
+                answer: 13
+            },
+            {
+                id: 8,
+                name: "ม้าหมุนดนตรีแสนสนุก",
+                icon: "🎠",
+                text: "มะลิซื้อม้าหมุนของเล่นชิ้นเล็กราคา 11 บาท และซื้อสติกเกอร์รูปการ์ตูนอีก 3 บาท มะลิต้องจ่ายเงินทั้งหมดกี่บาท?",
+                equation: "11 + 3 = ?",
+                choices: [12, 13, 14, 15],
+                answer: 14
+            },
+            {
+                id: 9,
+                name: "ว่าวบินลอยลม",
+                icon: "🪁",
+                text: "ร้านขายของเล่นมีว่าวรูปเครื่องบินอยู่ 13 ตัว วันนี้มีเด็กๆ มาซื้อไปได้ 6 ตัว จะเหลือว่าวรูปเครื่องบินกี่ตัว?",
+                equation: "13 - 6 = ?",
+                choices: [6, 7, 8, 9],
+                answer: 7
+            },
+            {
+                id: 10,
+                name: "ไข่สุ่มลุ้นโชค",
+                icon: "🥚",
+                text: "ในกล่องมีไข่สุ่มของเล่นอยู่ 20 ลูก เด็กๆ มาหยิบสุ่มไปคนละลูกจนไข่หายไป 8 ลูก จะเหลือไข่สุ่มอยู่ในกล่องกี่ลูก?",
+                equation: "20 - 8 = ?",
+                choices: [10, 11, 12, 13],
+                answer: 12
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let answeredCorrectly = Array(10).fill(false); // Track solved questions
+
+        // Initialize Game
+        function initGame() {
+            renderQuestion();
+            updateProgress();
+        }
+
+        // Render Current Question
+        function renderQuestion() {
+            const currentProb = problems[currentQuestionIndex];
+
+            // UI elements update
+            document.getElementById("question-toy-icon").innerText = currentProb.icon;
+            document.getElementById("question-number").innerText = `โจทย์ข้อที่ ${currentQuestionIndex + 1} / 10`;
+            document.getElementById("question-toy-name").innerText = `ภารกิจพาสัตว์เลี้ยง ${currentProb.name} ขึ้นชั้นวาง`;
+            document.getElementById("question-text").innerText = currentProb.text;
+            document.getElementById("equation-hint").innerText = `สมการใบ้: ${currentProb.equation}`;
+
+            // Reset Feedback and Next Button
+            const feedbackArea = document.getElementById("feedback-area");
+            feedbackArea.classList.add("hidden");
+            document.getElementById("next-btn").classList.add("hidden");
+
+            // Setup Choices
+            const choicesContainer = document.getElementById("choices-container");
+            choicesContainer.innerHTML = ""; // Clear old choices
+
+            currentProb.choices.forEach(choice => {
+                const btn = document.createElement("button");
+                btn.innerText = choice;
+                btn.className = "choice-btn py-4 px-6 text-2xl font-bold rounded-2xl border-4 border-amber-200 hover:border-amber-400 bg-amber-50 hover:bg-amber-100/50 text-amber-900 transition transform hover:-translate-y-1 active:translate-y-0 shadow-sm";
+
+                // If already solved, show state
+                if (answeredCorrectly[currentQuestionIndex]) {
+                    btn.disabled = true;
+                    if (choice === currentProb.answer) {
+                        btn.className = "py-4 px-6 text-2xl font-bold rounded-2xl border-4 border-emerald-500 bg-emerald-100 text-emerald-800 shadow-sm cursor-not-allowed";
+                        showFeedback(true, "ข้อนี้หนูตอบถูกไปแล้วจ้า! ยอดเยี่ยมมาก ✨");
+                        document.getElementById("next-btn").classList.remove("hidden");
+                    } else {
+                        btn.className = "py-4 px-6 text-2xl font-bold rounded-2xl border-4 border-gray-200 bg-gray-50 text-gray-300 shadow-sm cursor-not-allowed";
+                    }
+                } else {
+                    btn.onclick = () => selectAnswer(choice, btn);
+                }
+
+                choicesContainer.appendChild(btn);
+            });
+
+            // Prev button disabled on first question
+            document.getElementById("prev-btn").disabled = currentQuestionIndex === 0;
+        }
+
+        // Handle Answer Click
+        function selectAnswer(selectedValue, buttonElement) {
+            const currentProb = problems[currentQuestionIndex];
+            const allButtons = document.querySelectorAll(".choice-btn");
+
+            if (selectedValue === currentProb.answer) {
+                // Correct Answer!
+                answeredCorrectly[currentQuestionIndex] = true;
+                buttonElement.className = "py-4 px-6 text-2xl font-bold rounded-2xl border-4 border-emerald-500 bg-emerald-400 text-white shadow-md animate-bounce";
+
+                // Disable other buttons
+                allButtons.forEach(btn => btn.disabled = true);
+
+                // Celebrate with Confetti
+                triggerConfetti();
+
+                // Show Correct Feedback
+                showFeedback(true, "ถูกต้องแล้วจ้า! เก่งที่สุดในโลกเลย! 🎉");
+
+                // Unlock Toy on the Left Shelf Visual
+                unlockToyVisual(currentQuestionIndex);
+                updateProgress();
+
+                // Show "Next" button or completion
+                setTimeout(() => {
+                    document.getElementById("next-btn").classList.remove("hidden");
+                }, 1000);
+
+            } else {
+                // Wrong Answer
+                buttonElement.className = "py-4 px-6 text-2xl font-bold rounded-2xl border-4 border-red-400 bg-red-100 text-red-700 shadow-sm transition shake-animation";
+                showFeedback(false, "อ๊ะ! ยังไม่ถูกน้า ลองคิดใหม่อีกทีจ้า 🧸❤️");
+
+                // Shake effect manually
+                buttonElement.classList.add("animate-ping");
+                setTimeout(() => {
+                    buttonElement.classList.remove("animate-ping");
+                }, 500);
+            }
+        }
+
+        // Feedback system
+        function showFeedback(isCorrect, msg) {
+            const feedbackArea = document.getElementById("feedback-area");
+            const feedbackMsg = document.getElementById("feedback-message");
+
+            feedbackArea.classList.remove("hidden");
+            feedbackMsg.innerText = msg;
+
+            if (isCorrect) {
+                feedbackMsg.className = "text-lg font-bold p-3 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-200 animate-pulse";
+            } else {
+                feedbackMsg.className = "text-lg font-bold p-3 rounded-xl bg-red-100 text-red-800 border border-red-200";
+            }
+        }
+
+        // Unlock Toy on Shelf
+        function unlockToyVisual(index) {
+            const slot = document.getElementById(`toy-slot-${index}`);
+            if (slot) {
+                slot.classList.remove("grayscale", "opacity-30", "scale-75");
+                slot.classList.add("scale-110", "text-amber-600");
+                // Bounce effect
+                slot.classList.add("animate-bounce");
+                setTimeout(() => {
+                    slot.classList.remove("animate-bounce");
+                    slot.classList.add("scale-100");
+                }, 1000);
+            }
+        }
+
+        // Update overall progress bar
+        function updateProgress() {
+            const solvedCount = answeredCorrectly.filter(Boolean).length;
+            const percentage = (solvedCount / 10) * 100;
+
+            document.getElementById("progress-bar").style.width = `${percentage}%`;
+            document.getElementById("progress-text").innerText = `จัดร้านสำเร็จ ${solvedCount}/10 ชิ้น`;
+
+            // If complete, show completion screen at end
+            if (solvedCount === 10) {
+                setTimeout(() => {
+                    showCompletion();
+                }, 1500);
+            }
+        }
+
+        // Show Certificate / Win screen
+        function showCompletion() {
+            document.getElementById("game-container").classList.add("hidden");
+            document.getElementById("navigation-area").classList.add("hidden");
+            document.getElementById("completion-screen").classList.remove("hidden");
+
+            // Grand Celebration Confetti
+            let duration = 5 * 1000;
+            let end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        // Confetti generator for correct answers
+        function triggerConfetti() {
+            confetti({
+                particleCount: 80,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
+        // Navigation
+        function nextQuestion() {
+            if (currentQuestionIndex < 9) {
+                currentQuestionIndex++;
+                renderQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        // Reset game to play again
+        function resetGame() {
+            currentQuestionIndex = 0;
+            answeredCorrectly = Array(10).fill(false);
+
+            // Relock all shelf toys
+            for (let i = 0; i < 10; i++) {
+                const slot = document.getElementById(`toy-slot-${i}`);
+                if (slot) {
+                    slot.classList.add("grayscale", "opacity-30", "scale-75");
+                    slot.classList.remove("scale-100", "scale-110");
+                }
+            }
+
+            document.getElementById("game-container").classList.remove("hidden");
+            document.getElementById("navigation-area").classList.remove("hidden");
+            document.getElementById("completion-screen").classList.add("hidden");
+
+            initGame();
+        }
+
+        // Start game on load
+        window.onload = initGame;
+    </script>
+</body>
+
+</html>
